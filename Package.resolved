@@ -1,5 +1,5 @@
 {
-  "originHash" : "72495ba0290374533cf320ffcffdb6ab1714c466899c47e8d8cd6fb66debef30",
+  "originHash" : "31e3608d5ba3ea6eb750a8b4fcad25d23ccea55b6a8dfddac83d8c10d48d6865",
   "pins" : [
     {
       "identity" : "designscaffold",
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xocialize/mlx-trellis2-swift.git",
       "state" : {
-        "revision" : "1e9ef2c3fa7f584d1eb28bda808e15cf29d135ef",
-        "version" : "0.12.0"
+        "revision" : "26ded4a1ccb62a949e258dc40a78d4dadb91a97c",
+        "version" : "0.12.1"
       }
     },
     {

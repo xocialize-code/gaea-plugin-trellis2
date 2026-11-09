@@ -21,7 +21,7 @@ let package = Package(
     dependencies: [
         kitPath.map { .package(path: $0) }
             ?? .package(url: "https://github.com/xocialize-code/gaea-plugin-kit.git", from: "0.12.0"),
-        .package(url: "https://github.com/xocialize/mlx-trellis2-swift.git", from: "0.12.0"),
+        .package(url: "https://github.com/xocialize/mlx-trellis2-swift.git", from: "0.12.1"),
         .package(url: "https://github.com/xocialize/mlx-birefnet-swift.git", from: "0.4.0"),
         // Exactly the engine Gaea 1.4.0, GaeaPluginKit 0.12.0 and mlx-trellis2-swift 0.12.0's measurements are on: 0.76 adds
         // fields to the worker's memory report that GPP v1's closed schema doesn't carry.
