@@ -10,8 +10,11 @@ import Trellis2Plugin
 // lane configurations and the request the worker builds (Trellis2Plugin), and BiRefNet as the matting step. The GLB is
 // written to --out, and one JSON line of timings is printed. Not part of the plugin bundle.
 //
-//   trellis2-inproc --image <png|jpg> [--tier 512|1024|1536] [--seed 0] [--faces 300000] [--texture-size 1024]
-//                   [--background remove|keep|alpha] [--models-root <dir>] [--out <glb>]
+//   trellis2-inproc --image <png|jpg> [--model trellis2-512 | … | pixal3d-1024 | pixal3d-1536] [--lane <id>] [--seed 0]
+//                   [--faces 300000] [--texture-size 1024] [--background remove|keep|alpha] [--normal-map] [--ao-map]
+//                   [--fov 20] [--models-root <dir>] [--out <glb>]
+//
+// --tier 512|1024|1536 still names a stock TRELLIS.2 model.
 
 var args = Array(CommandLine.arguments.dropFirst())
 func option(_ name: String) -> String? {
@@ -27,21 +30,31 @@ func seconds(since start: ContinuousClock.Instant) -> Double {
 let modelsRoot = URL(fileURLWithPath: option("--models-root")
                      ?? NSHomeDirectory() + "/Library/Application Support/MLXEngine/Models", isDirectory: true)
 guard let imagePath = option("--image") else { fatalError("trellis2-inproc needs --image") }
-let resolution = Int(option("--tier") ?? "") ?? 512
-guard let tier = tiers.first(where: { $0.resolution == resolution }) else { fatalError("no tier \(resolution)") }
+func flag(_ name: String) -> Bool {
+    guard let i = args.firstIndex(of: name) else { return false }
+    args.remove(at: i)
+    return true
+}
+let modelID = option("--model") ?? "trellis2-\(option("--tier") ?? "512")"
+guard let tier = tiers.first(where: { $0.id == modelID }) else { fatalError("no model \(modelID)") }
+let lane = option("--lane") ?? tier.lanes[0]
+guard tier.lanes.contains(lane) else { fatalError("\(tier.id) has no lane \(lane)") }
 let ask = Ask(seed: UInt64(option("--seed") ?? "") ?? 0, faces: Int(option("--faces") ?? "") ?? defaultFaces,
-              textureSize: Int(option("--texture-size") ?? "") ?? defaultTextureSize, background: option("--background") ?? "remove")
+              textureSize: Int(option("--texture-size") ?? "") ?? defaultTextureSize, background: option("--background") ?? "remove",
+              normalMap: flag("--normal-map"), aoMap: flag("--ao-map"),
+              fov: tier.pixal3d ? Double(option("--fov") ?? "") ?? defaultFOV : nil)
 
 // The budget Gaea sends a worker on a large Mac (wiresWeights off).
 let engine = MLXServeEngine(workerBudget: WorkerBudget(ceilingBytes: 100_000_000_000, wiresWeights: false))
 await engine.useModelStore(ModelStore(root: modelsRoot))
 let matteID = PackageID(birefnetID), id = PackageID(tier.id)
 _ = try await engine.register(BiRefNetPackage.registration, configuration: birefnetConfiguration(), id: matteID)
-_ = try await engine.register(Trellis2Package.registration, configuration: configuration(tier), id: id)
+_ = try await engine.register(tier.pixal3d ? Pixal3DPackage.registration : Trellis2Package.registration,
+                              configuration: configuration(tier, lane: lane), id: id)
 var clock = ContinuousClock.now
 _ = try await engine.prepare(.matting, package: matteID)
 _ = try await engine.prepare(.imageTo3D, package: id)
-var result: [String: Any] = ["model": tier.id, "seed": ask.seed, "faces": ask.faces, "texture_size": ask.textureSize,
+var result: [String: Any] = ["model": tier.id, "lane": lane, "seed": ask.seed, "faces": ask.faces, "texture_size": ask.textureSize,
                              "background": ask.background, "prepare_s": seconds(since: clock)]
 clock = ContinuousClock.now
 let url = URL(fileURLWithPath: imagePath)

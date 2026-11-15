@@ -3,7 +3,7 @@ import PackageDescription
 
 // gaea-plugin-trellis2: Microsoft's TRELLIS.2 (MIT; its DINOv3 conditioner is under the DINOv3 License, "Built with
 // DINOv3") as a Gaea plugin on MES Mesh 0.1's mesh.generate: one image to a textured GLB, at three resolutions, each its
-// own model with the memory it takes. One worker executable built on GaeaPluginKit over mlx-trellis2-swift, with
+// own model with the memory it takes; and Pixal3D (Tencent ARC, MIT) on the two cascade resolutions. One worker executable built on GaeaPluginKit over mlx-trellis2-swift, with
 // BiRefNet (mlx-birefnet-swift) for cutting the object out of an opaque picture; packaged as a signed .gaeaplugin by
 // scripts/build-plugin.sh.
 //
@@ -20,13 +20,13 @@ let package = Package(
     platforms: [.macOS(.v26)], // mlx-engine-swift's MLXToolKit requires macOS 26
     dependencies: [
         kitPath.map { .package(path: $0) }
-            ?? .package(url: "https://github.com/xocialize-code/gaea-plugin-kit.git", from: "0.12.0"),
-        .package(url: "https://github.com/xocialize/mlx-trellis2-swift.git", from: "0.12.1"),
+            ?? .package(url: "https://github.com/xocialize-code/gaea-plugin-kit.git", from: "0.14.0"),
+        .package(url: "https://github.com/xocialize/mlx-trellis2-swift.git", exact: "0.17.0"),
         .package(url: "https://github.com/xocialize/mlx-birefnet-swift.git", from: "0.4.0"),
-        // Exactly the engine Gaea 1.4.0, GaeaPluginKit 0.12.0 and mlx-trellis2-swift 0.12.0's measurements are on: 0.76 adds
-        // fields to the worker's memory report that GPP v1's closed schema doesn't carry.
-        .package(url: "https://github.com/xocialize/mlx-engine-swift.git", exact: "0.74.1"),
-        // The fleet's mlx-swift fork, as mlx-engine-swift 0.74.1 takes it: 0.32.4 is upstream 0.32.3 plus the
+        // Exactly the engine GaeaPluginKit 0.14.0 and Gaea 1.8.0 are on (contract 1.64.0, Pixal3D's typed cameras). A
+        // later 0.x could add fields to the worker's memory report that GPP v1's closed schema doesn't carry.
+        .package(url: "https://github.com/xocialize/mlx-engine-swift.git", exact: "0.79.0"),
+        // The fleet's mlx-swift fork, as mlx-engine-swift takes it: 0.32.4 is upstream 0.32.3 plus the
         // _updateInternal leak fix (ml-explore/mlx-swift#501; AB-D-0208). A root line naming ml-explore's URL would win.
         .package(url: "https://github.com/xocialize/mlx-swift", exact: "0.32.4"),
     ],

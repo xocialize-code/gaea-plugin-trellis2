@@ -1,5 +1,5 @@
 {
-  "originHash" : "31e3608d5ba3ea6eb750a8b4fcad25d23ccea55b6a8dfddac83d8c10d48d6865",
+  "originHash" : "6234e340255540c324525c89a263cd0371fa58fc5e608fbdd02c4b163821ed6b",
   "pins" : [
     {
       "identity" : "designscaffold",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xocialize-code/gaea-plugin-kit.git",
       "state" : {
-        "revision" : "4083c7504a4b40c266058d1167071fec3cdbcf4e",
-        "version" : "0.12.0"
+        "revision" : "51f3cf555a54cb3d936e4082efe8dc18246c172f",
+        "version" : "0.14.0"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xocialize/mlx-engine-swift.git",
       "state" : {
-        "revision" : "1cc9efac41f46cf67fdc786e71bd11b3a4d268cb",
-        "version" : "0.74.1"
+        "revision" : "d75f43b903b9b72a684c99d37b85768c274ecc38",
+        "version" : "0.79.0"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xocialize/mlx-trellis2-swift.git",
       "state" : {
-        "revision" : "26ded4a1ccb62a949e258dc40a78d4dadb91a97c",
-        "version" : "0.12.1"
+        "revision" : "d25138da33982920b2b9c1f3f47257f49b3902ef",
+        "version" : "0.17.0"
       }
     },
     {
