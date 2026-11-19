@@ -350,8 +350,9 @@ func offer(_ tier: Tier) -> PluginManifest.Offer {
 }
 
 public let trellis2Plugin = GaeaPluginDefinition(
-    // On mlx-engine-swift 0.79.0 (contract 1.64.0, Pixal3D's cameras): Gaea 1.8.0 is the first on it.
-    id: "com.xocialize.gaea.trellis2", version: "0.2.0", minGaea: "1.8.0", team: "CFZS6RXUCP",
+    // Pixal3D's typed cameras came with mlx-engine-swift 0.79.0 (contract 1.64.0): Gaea 1.8.0 is the first on it. 0.2.1 is
+    // on mlx-engine-swift 0.82.1 (contract 1.66.0, which adds only imageLocate).
+    id: "com.xocialize.gaea.trellis2", version: "0.2.1", minGaea: "1.8.0", team: "CFZS6RXUCP",
     repo: "https://github.com/xocialize-code/gaea-plugin-trellis2", title: "TRELLIS.2",
     summary: "Microsoft's TRELLIS.2: a textured 3D mesh (GLB) of the object in one picture (MES mesh.generate), at 512, 1024 or 1536; and Pixal3D, which follows the photo pixel for pixel. Built with DINOv3.",
     license: "Apache-2.0", executable: "gaea-trellis2-worker",
